@@ -37,6 +37,10 @@ Personal configuration, plugins, custom scripts, and themes for [Yazi (terminal 
 - **Smart Date Formatting**: Powered by `linemode-plus.yazi` (today's files display `HH:mm`, previous files display compact `YY-MM-DD`).
 - **Keybinding**: Press `m c` to switch to combined mode, or use standard `m s` / `m m` for single attribute modes.
 
+### 6. 🚀 Frecency Directory History (Zoxide Integration)
+- **Keybinding**: Press **`Shift + z`** (`Z`) to invoke interactive directory history sorted by visit frequency & recency.
+- **Auto-tracking**: Enabled with `update_db = true` so visiting any directory inside Yazi continuously trains and updates your global zoxide database.
+
 ---
 
 ## 🔌 Bundled Plugins (`package.toml`)

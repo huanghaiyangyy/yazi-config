@@ -242,3 +242,9 @@ require("linemode-plus"):setup {
 	},
 }
 
+-- ── zoxide (进入目录时自动累积历史访问频次与时间权重) ─────────────────
+require("zoxide"):setup {
+	update_db = true,
+}
+
+
