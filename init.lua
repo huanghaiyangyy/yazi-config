@@ -231,3 +231,14 @@ require("keep-preferences"):setup({
 		},
 	},
 })
+
+-- ── linemode-plus.yazi (同时显示文件大小与修改时间，智能折叠当天日期) ─────
+require("linemode-plus"):setup {
+	date_mode = "custom",
+	custom = {
+		order = { "year", "month", "day" },
+		separator = "-",
+		year_digits = 2, -- 短年份（如 26-03-24），节省文件名横向显示空间
+	},
+}
+

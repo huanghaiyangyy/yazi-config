@@ -58,6 +58,11 @@ use = "yazi-rs/plugins:mount"
 rev = "f703392"
 hash = "b95f898e6dc60b52edbc415952e14395"
 
+[[plugin.deps]]
+use = "barbanevosa/linemode-plus"
+rev = "4d0d034"
+hash = "5d0ac26725d9a975bef1d0887374f10e"
+
 [[flavor.deps]]
 use = "yazi-rs/flavors:dracula"
 rev = "20b47bf"

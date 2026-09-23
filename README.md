@@ -32,6 +32,11 @@ Personal configuration, plugins, custom scripts, and themes for [Yazi (terminal 
 - `g o`: Jump to `Obsidian_Vault`
 - `;` / `` ` ``: Interactive Bunny bookmark drawer with quick key hints and fuzzy search.
 
+### 5. 🕒 Dual Linemode Display (Size + Modified Time)
+- **Default Linemode**: Set to `size_mtime` to display both readable file sizes and modification timestamps simultaneously.
+- **Smart Date Formatting**: Powered by `linemode-plus.yazi` (today's files display `HH:mm`, previous files display compact `YY-MM-DD`).
+- **Keybinding**: Press `m c` to switch to combined mode, or use standard `m s` / `m m` for single attribute modes.
+
 ---
 
 ## 🔌 Bundled Plugins (`package.toml`)
@@ -44,6 +49,7 @@ Managed and pinned via Yazi package manager `ya`:
 - `h-hg/yamb`: Ubuntu-style favorites
 - `yazi-rs/plugins:smart-enter`: Context-aware enter (directory enters, file opens)
 - `yazi-rs/plugins:git`: Git status icons
+- `barbanevosa/linemode-plus`: Dual size & mtime display with compact date formatting
 - `XYenon/keep-preferences`: Remembers directory sort & view styles
 - `WhoSowSee/mdv-previewer`: Terminal markdown reader
 - `llanosrocas/yaziline` & `Rolv-Apneseth/starship`: Status bar themes

@@ -133,6 +133,10 @@ desc = "YAMB: Rename by fzf"
 # m p: 显示权限 (permissions)
 # m o: 显示所属用户 (owner)
 # m n: 恢复默认无附加属性 (none)
+[[mgr.prepend_keymap]]
+on   = [ "m", "c" ]
+run  = "linemode size_mtime"
+desc = "Linemode: 大小 + 修改时间双显 (size + mtime)"
 
 # ── bookmarks.yazi (已释放 m 键，改为 ' 快速跳回，如需保存可用 bm) ────
 [[mgr.prepend_keymap]]
