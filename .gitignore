@@ -1,0 +1,14 @@
+# 历史与本地临时备份文件
+*.bak*
+*.fullbak
+*.minimal_test
+*.before_minimal
+
+# 第三方插件仓库（由 package.toml + ya pkg install 管理）
+plugins/
+
+# 系统与编辑器缓存
+.DS_Store
+*.log
+*.swp
+*~

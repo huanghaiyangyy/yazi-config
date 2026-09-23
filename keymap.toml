@@ -1,0 +1,182 @@
+# A TOML linter such as Tombi can use this schema to validate your config.
+#:schema https://yazi-rs.github.io/schemas/keymap.json
+
+# ── c c: 智能多模态复制（终端贴干净绝对路径，钉钉/微信贴文件卡片） ───────
+[[mgr.prepend_keymap]]
+on   = [ "c", "c" ]
+run  = 'shell -- yazi-clip %s'
+desc = "Smart copy: 终端贴路径，钉钉贴文件卡片"
+
+# ── smart-enter: 回车智能判断（文件夹进下一级，文件才打开） ─────────────
+# 文件夹 -> enter（等同 l，不调外部程序） | 文件 -> open（用关联程序打开）
+[[mgr.prepend_keymap]]
+on = "<Enter>"
+run = "plugin smart-enter"
+desc = "Smart enter: 进入目录或打开文件"
+
+# ── bunny.yazi (带按键提示的书签菜单面板) ──────────────────────────────
+# 按 ; 呼出书签面板（左侧带清晰字母提示，直接按字母跳转）
+[[mgr.prepend_keymap]]
+on = ";"
+run = "plugin bunny"
+desc = "Bunny: 打开书签面板"
+
+# 按 ; 再按 / ，或按单独快捷键直接唤起书签 fzf 模糊搜索
+[[mgr.prepend_keymap]]
+on = ["`"]
+run = "plugin bunny fuzzy"
+desc = "Bunny: 模糊搜索书签 (fzf)"
+
+# ── 核心项目极速直达 (随时双击 g+字母，零弹窗肌肉记忆) ─────────────────
+[[mgr.prepend_keymap]]
+on = ["g", "s"]
+run = "cd ~/Documents/sentry_algo"
+desc = "Go: sentry_algo"
+
+[[mgr.prepend_keymap]]
+on = ["g", "a"]
+run = "cd ~/fawvw_apa_env/apa_docs/自动泊车"
+desc = "Go: apa_docs/自动泊车"
+
+[[mgr.prepend_keymap]]
+on = ["g", "j"]
+run = "cd ~/fawvw_apa_env/J02泊车项目资料"
+desc = "Go: fawvw_apa_env/J02项目资料"
+
+[[mgr.prepend_keymap]]
+on = ["g", "f"]
+run = "cd ~/fawvw_apa_env"
+desc = "Go: fawvw_apa_env"
+
+[[mgr.prepend_keymap]]
+on = ["g", "o"]
+run = "cd ~/Documents/Obsidian_Vault"
+desc = "Go: Obsidian_Vault"
+
+[[mgr.prepend_keymap]]
+on = ["g", "m"]
+run = "cd /media/huang"
+desc = "Go: /media/huang (外挂盘)"
+
+# ── M: 外挂磁盘/U盘管理面板 (挂载、跳转、安全弹出) ───────────────────
+[[mgr.prepend_keymap]]
+on   = "M"
+run  = "plugin mount"
+desc = "Drives: 外挂磁盘/U盘管理面板"
+
+# ── 在当前目录直接启动外部工具（按 yazi 当前 cwd 运行） ────────────────
+# 前置键用 <C-e> 与 <C-g>，避开 yazi 原生单键 e / G / g 等高频键
+# LazyVim：打开 yazi 当前所在目录
+[[mgr.prepend_keymap]]
+on = ["<C-e>", "e"]
+run = 'shell --block -- nvim .'
+desc = "LazyVim: 在当前目录打开 nvim"
+
+# LazyVim：打开当前选中的文件
+[[mgr.prepend_keymap]]
+on = ["<C-e>", "f"]
+run = 'shell --block -- nvim %s'
+desc = "LazyVim: 打开当前选中文件"
+
+# 终端：在当前目录开一个交互 shell
+[[mgr.prepend_keymap]]
+on = ["<C-e>", "t"]
+run = 'shell --interactive'
+desc = "Terminal: 在当前目录打开 shell"
+
+# LazyGit：在当前仓库目录打开（自动识别 .git）
+[[mgr.prepend_keymap]]
+on = ["<C-g>", "g"]
+run = 'shell --block -- lazygit'
+desc = "LazyGit: 在当前目录打开"
+
+# ── yamb.yazi (Ubuntu 收藏夹式，保留备用) ─────────────────────────────
+# u + a: 添加收藏  |  u + g: 按键跳转  |  u + G: fzf 列表跳转（最像 Ubuntu 侧边栏）
+[[mgr.prepend_keymap]]
+on = ["u", "a"]
+run = "plugin yamb -- save"
+desc = "YAMB: Add bookmark"
+
+[[mgr.prepend_keymap]]
+on = ["u", "g"]
+run = "plugin yamb -- jump_by_key"
+desc = "YAMB: Jump by key"
+
+[[mgr.prepend_keymap]]
+on = ["u", "G"]
+run = "plugin yamb -- jump_by_fzf"
+desc = "YAMB: Jump by fzf (Ubuntu-like)"
+
+[[mgr.prepend_keymap]]
+on = ["u", "d"]
+run = "plugin yamb -- delete_by_key"
+desc = "YAMB: Delete by key"
+
+[[mgr.prepend_keymap]]
+on = ["u", "D"]
+run = "plugin yamb -- delete_by_fzf"
+desc = "YAMB: Delete by fzf"
+
+[[mgr.prepend_keymap]]
+on = ["u", "r"]
+run = "plugin yamb -- rename_by_key"
+desc = "YAMB: Rename by key"
+
+[[mgr.prepend_keymap]]
+on = ["u", "R"]
+run = "plugin yamb -- rename_by_fzf"
+desc = "YAMB: Rename by fzf"
+
+# ── 原生 linemode (属性显示) 已释放恢复 ──────────────────────────────
+# m s: 显示文件大小 (size)
+# m m: 显示修改时间 (mtime)
+# m p: 显示权限 (permissions)
+# m o: 显示所属用户 (owner)
+# m n: 恢复默认无附加属性 (none)
+
+# ── bookmarks.yazi (已释放 m 键，改为 ' 快速跳回，如需保存可用 bm) ────
+[[mgr.prepend_keymap]]
+on = ["b", "m"]
+run = "plugin bookmarks save"
+desc = "Bookmarks: 保存当前位置为书签"
+
+[[mgr.prepend_keymap]]
+on = "'"
+run = "plugin bookmarks jump"
+desc = "Bookmarks: 跳转到标记位置"
+
+[[mgr.prepend_keymap]]
+on = ["b", "d"]
+run = "plugin bookmarks delete"
+desc = "Bookmarks: 删除单个书签"
+
+[[mgr.prepend_keymap]]
+on = ["b", "D"]
+run = "plugin bookmarks delete_all"
+desc = "Bookmarks: 删除所有书签"
+
+# ── 压缩与解压管理 (Archive Menu，前缀 e 交互菜单) ────────────────────
+# e c: 压缩选中的文件（交互输入文件名，支持 .zip / .tar.gz / .tar.xz / .7z 等）
+[[mgr.prepend_keymap]]
+on   = [ "e", "c" ]
+run  = "plugin compress"
+desc = "Compress: 压缩选中的文件"
+
+# e p: 加密压缩（带密码输入提示）
+[[mgr.prepend_keymap]]
+on   = [ "e", "p" ]
+run  = "plugin compress -p"
+desc = "Compress: 加密压缩 (提示输入密码)"
+
+# e e: 双击 e，极速解压到同名文件夹（安全防炸包）
+[[mgr.prepend_keymap]]
+on   = [ "e", "e" ]
+run  = '''shell -- 7z x "$1" -o"${1%.*}"'''
+desc = "Extract: 解压到同名文件夹 (防炸包)"
+
+# e x: 直接解压到当前目录
+[[mgr.prepend_keymap]]
+on   = [ "e", "x" ]
+run  = '''shell -- 7z x "$1"'''
+desc = "Extract: 直接解压到当前目录"
+# ─────────────────────────────────────────────────────────────────────────

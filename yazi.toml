@@ -1,0 +1,64 @@
+# A TOML linter such as Tombi can use this schema to validate your config.
+#:schema https://yazi-rs.github.io/schemas/yazi.json
+
+[mgr]
+ratio          = [1, 3, 4]
+sort_by        = "alphabetical"
+sort_sensitive = false
+sort_reverse   = false
+sort_dir_first = true
+sort_translit  = false
+linemode       = "size"
+show_hidden    = false
+show_symlink   = true
+scrolloff      = 5
+mouse_events   = ["click", "scroll"]
+title_format   = "Yazi: {cwd}"
+
+[preview]
+tab_size        = 2
+max_width       = 600
+max_height      = 900
+cache_dir       = ""
+image_filter    = "triangle"
+image_quality   = 75
+sixel_fraction  = 15
+ueberzug_scale  = 1
+ueberzug_offset = [0, 0, 0, 0]
+
+[plugin]
+prepend_fetchers = [
+  { url = "*",  run = "git", group = "git" },
+  { url = "*/", run = "git", group = "git" },
+]
+
+# piper previews
+[[plugin.prepend_previewers]]
+url = "*.tar*"
+run = 'piper --format=url -- tar tf "$1"'
+
+[[plugin.prepend_previewers]]
+url = "*.csv"
+run = 'piper -- batcat -p --color=always "$1"'
+
+[[plugin.prepend_previewers]]
+url = "*.{md,markdown}"
+run = "mdv-previewer"
+
+[[plugin.prepend_preloaders]]
+url = "*.{md,markdown}"
+run = "mdv-previewer"
+
+# ── Markdown 打开方式：默认走 mdv 只读阅读器，O 键可换编辑器 ──────
+[opener]
+# mdv 内置分页器阅读（j/k 滚动，g/G 首尾，q 退出）
+mdv = [
+  { run = "mdv -p %s", desc = "mdv 只读阅读", block = true },
+]
+
+[open]
+prepend_rules = [
+  # markdown：Enter 默认用 mdv 阅读；按 O 可交互选择 nvim / code / obsidian
+  { url = "*.{md,markdown}", use = [ "mdv", "edit", "reveal" ] },
+]
+

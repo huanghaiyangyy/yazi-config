@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+"""
+yazi-clip: 智能多模态剪贴板助手 (Smart Multi-Target Clipboard)
+像 Ubuntu Nautilus (Files) 一样：
+- 粘贴到 钉钉 / 微信 / 网页 / 文件管理器 时：识别为【文件卡片 / 文件对象】(text/uri-list)
+- 粘贴到 终端 / Vim / 文本编辑器 时：识别为【干净绝对路径】(UTF8_STRING / text/plain)
+"""
+
+import sys
+import os
+import urllib.parse
+
+def daemonize():
+    if os.fork() > 0:
+        sys.exit(0)
+    os.setsid()
+    if os.fork() > 0:
+        sys.exit(0)
+    with open('/dev/null', 'r') as devnull:
+        os.dup2(devnull.fileno(), sys.stdin.fileno())
+    with open('/dev/null', 'a+') as devnull:
+        os.dup2(devnull.fileno(), sys.stdout.fileno())
+        os.dup2(devnull.fileno(), sys.stderr.fileno())
+
+def main():
+    files = [os.path.abspath(f) for f in sys.argv[1:] if os.path.exists(f)]
+    if not files:
+        sys.exit(0)
+
+    # 杀掉可能存在的上一个后台实例
+    pid_file = "/tmp/yazi_clip_daemon.pid"
+    if os.path.exists(pid_file):
+        try:
+            with open(pid_file, "r") as f:
+                old_pid = int(f.read().strip())
+            os.kill(old_pid, 15)
+        except Exception:
+            pass
+
+    daemonize()
+
+    try:
+        with open(pid_file, "w") as f:
+            f.write(str(os.getpid()))
+    except Exception:
+        pass
+
+    from PyQt5.QtWidgets import QApplication
+    from PyQt5.QtCore import QMimeData, QUrl, QByteArray
+
+    app = QApplication(['yazi-clip-daemon'])
+    clipboard = app.clipboard()
+
+    uris = [QUrl.fromLocalFile(f) for f in files]
+    mime = QMimeData()
+    mime.setUrls(uris)
+
+    # 1. 终端 / 纯文本通道：多个文件用空格连接，含空格的文件加引号包裹，方便终端传参
+    text_repr = " ".join([f'"{f}"' if ' ' in f else f for f in files])
+    mime.setText(text_repr)
+
+    # 2. GNOME Nautilus 通道
+    gnome_data = b"copy\n" + b"\n".join([u.toString().encode("utf-8") for u in uris])
+    mime.setData("x-special/gnome-copied-files", QByteArray(gnome_data))
+
+    clipboard.setMimeData(mime)
+
+    # 当系统剪贴板被其他应用更新时，本守护进程平稳退出
+    def on_change():
+        try:
+            if os.path.exists(pid_file):
+                os.remove(pid_file)
+        except Exception:
+            pass
+        app.quit()
+
+    clipboard.dataChanged.connect(on_change)
+    sys.exit(app.exec_())
+
+if __name__ == '__main__':
+    main()
